@@ -13,7 +13,7 @@ Rails.start();
 Turbolinks.start();
 ActiveStorage.start();
 
-$(document).ready(function () {
+$(document).on("turbolinks:load", function () {
   $("#chatgpt-btn").click((e) => {
     $(e.target).hide();
     $("#chatgpt-loader").removeClass("d-none");
