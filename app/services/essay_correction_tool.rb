@@ -32,6 +32,7 @@ class EssayCorrectionTool
     response = @client.completions(
       parameters: {
           model: "text-davinci-003",
+          temperature: 0.9,
           prompt: design_prompt,
           max_tokens: 1500,
       })
@@ -67,7 +68,7 @@ class EssayCorrectionTool
   def design_prompt
     "I am a Year #{@year_level} student and I was given the essay prompt \"#{@essay_question}\"\n\n
     This is my #{@type_of_paragraph}. What are the three steps I could do to improve my #{@type_of_paragraph}.
-    Could you please explain why I should do these improvements without rewriting it for me in British English?
+    Could you please explain why I should do these improvements in British English without rewriting it for me?
     #{@your_paragraph}"
   end
 end

@@ -12,7 +12,7 @@ class HomeController < ApplicationController
       @type_of_paragraph,
       @essay_question,
       @your_paragraph,
-      "gpt-3.5-turbo",
+      "text-davinci-003",
     ).get_suggestions
   end
 end
