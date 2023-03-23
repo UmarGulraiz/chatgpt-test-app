@@ -11,7 +11,7 @@ class HomeController < ApplicationController
       @type_of_paragraph,
       @essay_question,
       @your_paragraph,
-      "text-davinci-003",
+      "gpt-4",
     ).get_suggestions
 
     reset_fields

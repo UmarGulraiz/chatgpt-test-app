@@ -19,7 +19,7 @@ class EssayCorrectionTool
 
     if @model == "text-davinci-003"
       response_data = use_completion_api
-    else @model == "gpt-3.5-turbo"
+    elsif ["gpt-3.5-turbo", "gpt-4"].include?(@model)
       response_data =  use_chat_api
     end
     # handle_response(response_data)
@@ -42,9 +42,10 @@ class EssayCorrectionTool
   def use_chat_api
     response = @client.chat(
       parameters:{
-        model: "gpt-3.5-turbo",
+        model: @model,
         messages: [{"role": "user", "content": design_prompt}]
       })
+
     response["choices"][0]["message"]["content"]
   end
 
@@ -68,7 +69,7 @@ class EssayCorrectionTool
   def design_prompt
     "I am a Year #{@year_level} student and I was given the essay prompt \"#{@essay_question}\"\n\n
     This is my #{@type_of_paragraph}. What are the three steps I could do to improve my #{@type_of_paragraph}.
-    Could you please explain why I should do these improvements in British English without rewriting it for me?
+    Could you please explain why I should do these improvements without rewriting it for me?
     #{@your_paragraph}"
   end
 end
