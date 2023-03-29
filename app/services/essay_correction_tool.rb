@@ -58,8 +58,12 @@ class EssayCorrectionTool
     text_array = []
     text_array.push text.match(FIRST_BULLET_REGEX).to_s
     text_array.push text.match(SECOND_BULLET_REGEX).to_s
-    text_array.push text.match(THIRD_BULLET_REGEX).to_s
+    text_array.push modify_third_point(text.match(THIRD_BULLET_REGEX).to_s)
     text_array
+  end
+
+  def modify_third_point(text)
+    text.split("\n\n")[0] rescue ""
   end
 
   def sanitize_array(suggestion_array)
