@@ -5,9 +5,10 @@ class EssayCorrectionTool
   SECOND_BULLET_REGEX = /((?<=2\)).*(?=3\))|(?<=2\.).*(?=3\.)|(?<=2\:).*(?=3\:)|(?<=Step 2\:).*(?=Step 3\:))/m
   THIRD_BULLET_REGEX  = /((?<=3\)).*|(?<=3\.).*|(?<=3\:).*|(?<=Step 3\:).*)/m
 
-  def initialize year_level, type_of_paragraph, essay_question, your_paragraph, model
+  def initialize year_level, type_of_paragraph, essay_type, essay_question, your_paragraph, model
     @year_level = year_level
     @type_of_paragraph = type_of_paragraph
+    @essay_type = essay_type
     @essay_question = essay_question
     @your_paragraph = your_paragraph
     @client = OpenAI::Client.new
@@ -71,9 +72,34 @@ class EssayCorrectionTool
   end
 
   def design_prompt
-    "I am a Year #{@year_level} student and I was given the essay prompt \"#{@essay_question}\"\n\n
-    This is my #{@type_of_paragraph}. What are the three steps I could do to improve my #{@type_of_paragraph}.
-    Could you please explain why I should do these improvements without rewriting it for me?
-    #{@your_paragraph}"
+    return text_analytics_prompt if @essay_type == "Text Analysis"
+    return comparative_prompt if @essay_type == "Comparative"
+    return persuasive_prompt if @essay_type == "Persuasive"
+
+    # "I am a Year #{@year_level} student and I was given the essay prompt \n
+    # This is my #{@type_of_paragraph}. What are the three steps I could do to improve my #{@type_of_paragraph}.
+    # Could you please explain why I should do these improvements without rewriting it for me?
+    # #{@your_paragraph}"
+  end
+
+  def text_analytics_prompt
+    "I am a Year #{@year_level} student and I was given the essay prompt:\"#{@essay_question}\".\n"\
+    "This is a text analysis #{@type_of_paragraph}. This essay is meant to focus on a particular theme of literary element within a specific work of literature.\n"\
+    "What are three steps I could do to improve my #{@type_of_paragraph}? Could you explain why I should do those improvements without rewriting it for me?\n"\
+    "#{@your_paragraph}"
+  end
+
+  def comparative_prompt
+    "I am a Year #{@year_level} student and I was given the essay prompt:\"#{@essay_question}\".\n"\
+    "This is a comparative #{@type_of_paragraph}. This essay is meant to compare and contrast two or more texts focusing on a particular theme or literary element.\n"\
+    "What are three steps I could do to improve my #{@type_of_paragraph}? Could you explain why I should do those improvements without rewriting it for me?\n"\
+    "#{@your_paragraph}"
+  end
+
+  def persuasive_prompt
+    "I am a Year #{@year_level} student and I was given the essay prompt:\"#{@essay_question}\".\n"\
+    "This is a persuasive #{@type_of_paragraph}. This essay is meant to argue for a particular reason or viewpoint on a controversial issue.\n"\
+    "What are three steps I could do to improve my #{@type_of_paragraph}? Could you explain why I should do those improvements without rewriting it for me?\n"\
+    "#{@your_paragraph}"
   end
 end

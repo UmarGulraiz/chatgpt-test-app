@@ -4,13 +4,17 @@
   </div>
   <%= form_with url: get_suggestions_path do |f| %>
     <div class="row mb-4">
-      <div class="col-6">
+      <div class="col-4">
         <%= f.label :year_level, class: "form-label" %>
         <%= f.select :year_level, ["7", "8", "9", "10", "11", "12"], {selected: @year_level}, class: "form-select" %>
       </div>
-      <div class="col-6">
+      <div class="col-4">
         <%= f.label :type_of_paragraph, class: "form-label" %>
-        <%= f.select :type_of_paragraph, ["introduction", "Body Paragraph", "Conclusion"], {selected: @type_of_paragraph}, class: "form-select" %>
+        <%= f.select :type_of_paragraph, ["Introduction", "Body Paragraph", "Conclusion"], {selected: @type_of_paragraph}, class: "form-select" %>
+      </div>
+      <div class="col-4">
+        <%= f.label :essay_type, class: "form-label" %>
+        <%= f.select :essay_type, ["Text Analysis", "Comparative", "Persuasive"], {selected: @essay_type}, class: "form-select" %>
       </div>
     </div>
     <div class="mb-4">
