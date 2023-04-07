@@ -6,15 +6,17 @@ class HomeController < ApplicationController
    def get_suggestions
     return unless execute_chatgpt_api?
 
-    @suggestions = EssayCorrectionTool.new(
+    EssaySuggestionToolJob.perform_async(
       @year_level,
       @type_of_paragraph,
       @essay_type,
       @essay_question,
       @your_paragraph,
       "gpt-4",
-    ).get_suggestions
+      @email_address
+    )
 
+    @submitted = true
     reset_fields
   end
 
@@ -26,11 +28,17 @@ class HomeController < ApplicationController
     @essay_type = params[:essay_type]
     @essay_question = params[:essay_question]
     @your_paragraph = params[:your_paragraph]
+    @email_address =  params[:email_address]
     @suggestions = ""
   end
 
   def execute_chatgpt_api?
-    @year_level.present? && @type_of_paragraph.present? && @essay_type.present? && @essay_question.present? && @your_paragraph.present?
+    @year_level.present? &&
+    @type_of_paragraph.present? &&
+    @essay_type.present? &&
+    @essay_question.present? &&
+    @your_paragraph.present? &&
+    @email_address.present?
   end
 
   def reset_fields

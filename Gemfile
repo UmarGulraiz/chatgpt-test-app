@@ -21,6 +21,10 @@ gem 'jbuilder', '~> 2.7'
 gem "ruby-openai"
 # for environmental variables
 gem "figaro"
+# for background jobs
+gem "sidekiq"
+
+gem "letter_opener"
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password

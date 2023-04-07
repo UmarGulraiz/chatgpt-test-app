@@ -1,0 +1,22 @@
+<style>
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+  }
+  .py-1 {
+    padding: 3px 0;
+  }
+  </style>
+<div class="pt-3">
+<% if @suggestions.present? %>
+  <hr/>
+  <h4>Suggestions:</h4>
+
+  <ol>
+    <% @suggestions.each do |suggestion| %>
+      <li class="py-1"><%= suggestion %></li>
+    <% end %>
+  </ol>
+<% else %>
+  <h4>Something went wrong, we couldn't get the suggestions</h4>
+<% end %>
+<div>
