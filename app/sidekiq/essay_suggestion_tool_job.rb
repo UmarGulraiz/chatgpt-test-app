@@ -22,7 +22,15 @@ class EssaySuggestionToolJob
 
     suggestions_array = handle_response(response_data)
 
-    OpenaiMailer.send_response(suggestions_array, email_address).deliver_now
+    OpenaiMailer.send_response(
+      year_level,
+      type_of_paragraph,
+      essay_type,
+      essay_question,
+      your_paragraph,
+      suggestions_array,
+      email_address
+    ).deliver_now
   end
 
   private
