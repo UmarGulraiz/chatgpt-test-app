@@ -1,0 +1,2 @@
+class EssaySuggester < ApplicationRecord
+end

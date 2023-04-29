@@ -1,0 +1,40 @@
+<div class="p-5">
+
+  <h3 class="mb-4">Input fields</h3>
+
+  <h5 >Year Of Student:</h5>
+  <p class="px-3"><%= @essay_suggester.year_level %></p>
+
+  <h5 >Type Of Paragraph:</h5>
+  <p class="px-3"><%= @essay_suggester.type_of_paragraph %></p>
+
+  <h5 >Type Of Essay:</h5>
+  <p class="px-3"><%= @essay_suggester.essay_type %></p>
+
+  <h5 >Essay Question:</h5>
+  <p class="px-3"><%= @essay_suggester.essay_question %></p>
+
+  <h5 >Paragraph:</h5>
+  <p class="px-3"><%= @essay_suggester.your_paragraph %></p>
+
+  <hr/>
+  <h4>Suggestions:</h4>
+  <% if  @essay_suggester.suggestions_array.present? %>
+    <ol>
+      <% @essay_suggester.suggestions_array.each do |suggestion| %>
+        <li style="padding: 3px 0;"><%= suggestion %></li>
+      <% end %>
+    </ol>
+  <% else %>
+    <h4>Something went wrong, we couldn't get the suggestions</h4>
+  <% end %>
+<div>
+<div
+  data-tf-widget="ZyLBQlYt"
+  data-tf-opacity="100"
+  data-tf-iframe-props="title=AI feedback"
+  data-tf-transitive-search-params
+  data-tf-medium="snippet"
+  data-tf-hidden="year_level=<%= @essay_suggester.year_level %>,type_of_paragraph=<%= @essay_suggester.type_of_paragraph %>,essay_type=<%= @essay_suggester.essay_type %>,essay_question=<%= @essay_suggester.essay_question.gsub(',', ' ') %>,your_paragraph=<%= @essay_suggester.your_paragraph.gsub(',', ' ') %>"
+  style="width:100%;height:500px;">
+</div><script src="//embed.typeform.com/next/embed.js"></script>

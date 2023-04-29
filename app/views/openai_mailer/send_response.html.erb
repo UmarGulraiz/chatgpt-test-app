@@ -6,32 +6,6 @@
 
 <div class="pt-3">
 
-  <h3>Input fields</h3>
-
-  <h4 style="margin: 5px 0px;">Year Of Student:</h4>
-  <p style="margin: 0 0 20px 0;"><%= @year_level %></p>
-
-  <h4 style="margin: 5px 0px;">Type Of Paragraph:</h4>
-  <p style="margin: 0 0 20px 0;"><%= @type_of_paragraph %></p>
-
-  <h4 style="margin: 5px 0px;">Type Of Essay:</h4>
-  <p style="margin: 0 0 20px 0;"><%= @essay_type %></p>
-
-  <h4 style="margin: 5px 0px;">Essay Question:</h4>
-  <p style="margin: 0 0 20px 0;"><%= @essay_question %></p>
-
-  <h4 style="margin: 5px 0px;">Paragraph:</h4>
-  <p style="margin: 0 0 20px 0;"><%= @your_paragraph %></p>
-
-  <hr/>
-  <h3>Suggestions:</h3>
-  <% if @suggestions.present? %>
-    <ol>
-      <% @suggestions.each do |suggestion| %>
-        <li style="padding: 3px 0;"><%= suggestion %></li>
-      <% end %>
-    </ol>
-  <% else %>
-    <h4>Something went wrong, we couldn't get the suggestions</h4>
-  <% end %>
+  <p>To view your feedback, <%= link_to "click here", essay_suggester_url(@essay_suggester) %>.</p>
+  <p>Please give the feedback a rating.</p>
 <div>

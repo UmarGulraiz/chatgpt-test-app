@@ -22,15 +22,16 @@ class EssaySuggestionToolJob
 
     suggestions_array = handle_response(response_data)
 
-    OpenaiMailer.send_response(
-      year_level,
-      type_of_paragraph,
-      essay_type,
-      essay_question,
-      your_paragraph,
-      suggestions_array,
-      email_address
-    ).deliver_now
+    essay_suggester = EssaySuggester.create(
+      year_level: @year_level,
+      type_of_paragraph: @type_of_paragraph,
+      essay_type: @essay_type,
+      essay_question: @essay_question,
+      your_paragraph: @your_paragraph,
+      suggestions_array: suggestions_array
+    )
+
+    OpenaiMailer.send_response(type_of_paragraph, essay_type, email_address, essay_suggester.id).deliver_now
   end
 
   private
@@ -40,7 +41,7 @@ class EssaySuggestionToolJob
       parameters: {
           model: "text-davinci-003",
           temperature: 0.9,
-          prompt: design_prompt,
+          prompt: design_prompt_v2,
           max_tokens: 1500,
       })
     response["choices"][0]["text"]
@@ -50,7 +51,7 @@ class EssaySuggestionToolJob
     response = @client.chat(
       parameters:{
         model: @model,
-        messages: [{"role": "user", "content": design_prompt}]
+        messages: [{"role": "user", "content": design_prompt_v2}]
       })
 
     response["choices"][0]["message"]["content"]
@@ -72,6 +73,126 @@ class EssaySuggestionToolJob
     return text_analytics_prompt if @essay_type == "Text Analysis"
     return comparative_prompt if @essay_type == "Comparative"
     return persuasive_prompt if @essay_type == "Persuasive"
+  end
+
+  def depth_of_suggestions
+    return "in specific but simple terms" if ["7", "8", "9"].include?(@year_level)
+    return "in specific detail" if ["10", "11", "12"].include?(@year_level)
+  end
+
+  def text_analysis_introduction
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- Each argument that will be discussed in the essay is mentioned\n" \
+    "- The studied text has been clearly introduced with supporting context to assist the reader in understanding the text\n"
+  end
+
+  def text_analysis_body_paragraph
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- There is a minimum of three pieces of evidence from the text, which have each been explained or analysed to support the argument\n" \
+    "- There is a clear topic sentence which captures what the paragraph is about\n" \
+    "- A concluding sentence that sums up the paragraph is featured and connects back to the topic sentence\n" \
+    "- The writing follows a logical and organised structure\n" \
+    "- Transitional words are used to connect evidence and analyses.\n"
+  end
+
+  def text_analysis_conclusion
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- The studied text has been reintroduced\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- The arguments mentioned in the body of the essay have been summarised\n"
+  end
+
+  def comparative_introduction
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- Each argument that will be discussed in the essay is mentioned\n" \
+    "- Both studied texts have been clearly introduced with supporting context to assist the reader in understanding both of the texts\n" \
+    "- A clear link has been established between both texts\n"
+  end
+
+  def comparative_body_paragraph
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- There is a minimum of three pieces of evidence from the text, which have each been explained or analysed to support the argument\n" \
+    "- There is a clear topic sentence which captures what the paragraph is about\n" \
+    "- The writing has mentioned and analysed both texts, with reference to the context of each\n" \
+    "- A concluding sentence that sums up the paragraph is featured and connects back to the topic sentence\n" \
+    "- The writing follows a logical and organised structure\n" \
+    "- Transitional words are used to connect evidence and analyses, specifically between texts\n"
+  end
+
+  def comparative_conclusion
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- Both studied texts have been reintroduced\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- The arguments mentioned in the body of the essay have been summarised\n"
+  end
+
+  def persuasive_introduction
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- There is an attention grabbing opening that adds depth to the question\n" \
+    "- Each argument that will be discussed in the essay is mentioned\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- Some context around the topic has been included\n"
+  end
+
+  def persuasive_body_paragraph
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- There is a clear topic sentence which captures what the paragraph is about\n" \
+    "- A concluding sentence that sums up the paragraph is featured\n" \
+    "- The writing follows a logical and organised structure\n" \
+    "- Transitional words are used to connect evidence and analyses\n" \
+    "- Counter-arguments have been included but also reasoning to refute them \n"
+  end
+
+  def persuasive_conclusion
+    "- The sentences aren't overly long, unclear or complex\n" \
+    "- The writing has answered or used the wording of the question\n" \
+    "- A clear and concise thesis statement is featured\n" \
+    "- The arguments mentioned in the body of the essay have been summarised\n" \
+    "- There is a call to action\n"
+  end
+
+  def text_analysis_conditions
+    return text_analysis_introduction if @type_of_paragraph == "Introduction"
+    return text_analysis_body_paragraph if @type_of_paragraph == "Body Paragraph"
+    return text_analysis_conclusion if @type_of_paragraph == "Conclusion"
+  end
+
+  def comparative_conditions
+    return comparative_introduction if @type_of_paragraph == "Introduction"
+    return comparative_body_paragraph if @type_of_paragraph == "Body Paragraph"
+    return comparative_conclusion if @type_of_paragraph == "Conclusion"
+  end
+
+  def persuasive_conditions
+    return persuasive_introduction if @type_of_paragraph == "Introduction"
+    return persuasive_body_paragraph if @type_of_paragraph == "Body Paragraph"
+    return persuasive_conclusion if @type_of_paragraph == "Conclusion"
+  end
+
+  def essay_suggestions
+    return text_analysis_conditions if @essay_type == "Text Analysis"
+    return comparative_conditions if @essay_type == "Comparative"
+    return persuasive_conditions if @essay_type == "Persuasive"
+  end
+
+  def design_prompt_v2
+    "I am a Year #{@year_level} student and I was given this essay prompt for a #{@essay_type} essay:\n\n" \
+    "#{@essay_question}\n\n" \
+    "Can you give me three numbered steps I could take to improve my #{@type_of_paragraph}. Could you explain each step #{depth_of_suggestions} why I should include them without giving me an example. Please format the response with both the step and reason in the same paragraph.\n\n" \
+    "Can you base the three steps on the following conditions. If the writing doesn’t meet one or more of these conditions please suggest a step and reason to meet that condition. If all of the conditions have been met other suggestions on the writing can be made. Only three steps are to be provided though. These are the conditions ranked in order of importance:\n" \
+    "#{essay_suggestions}\n" \
+    "Here is my #{@type_of_paragraph}:\n" \
+    "#{@your_paragraph}"
   end
 
  def text_analytics_prompt

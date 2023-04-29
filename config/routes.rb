@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'home/index'
   get '/get-suggestions', to: "home#get_suggestions"
   post '/get-suggestions', to: "home#get_suggestions"
+  resources :essay_suggesters
   root "home#index"
   mount Sidekiq::Web => "/sidekiq"
 

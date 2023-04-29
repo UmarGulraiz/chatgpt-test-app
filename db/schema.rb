@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2023_04_29_143344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "essay_suggesters", force: :cascade do |t|
+    t.string "year_level"
+    t.string "type_of_paragraph"
+    t.string "essay_type"
+    t.string "essay_question"
+    t.string "your_paragraph"
+    t.json "suggestions_array"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end
