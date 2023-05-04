@@ -35,6 +35,6 @@
   data-tf-iframe-props="title=AI feedback"
   data-tf-transitive-search-params
   data-tf-medium="snippet"
-  data-tf-hidden="year_level=<%= @essay_suggester.year_level %>,type_of_paragraph=<%= @essay_suggester.type_of_paragraph %>,essay_type=<%= @essay_suggester.essay_type %>,essay_question=<%= @essay_suggester.essay_question.gsub(',', ' ') %>,your_paragraph=<%= @essay_suggester.your_paragraph.gsub(',', ' ') %>,ai_response=<%= @essay_suggester&.suggestions_array&.join(',')%>"
+  data-tf-hidden="ai_response=<%= get_formatted_ai_response(@essay_suggester.suggestions_array)%>,year_level=<%= @essay_suggester.year_level %>,type_of_paragraph=<%= @essay_suggester.type_of_paragraph %>,essay_type=<%= @essay_suggester.essay_type %>,essay_question=<%= @essay_suggester.essay_question.gsub(',', ' ') %>,your_paragraph=<%= @essay_suggester.your_paragraph.gsub(',', ' ') %>"
   style="width:100%;height:500px;">
 </div><script src="//embed.typeform.com/next/embed.js"></script>
