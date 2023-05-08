@@ -188,6 +188,11 @@ class EssaySuggestionToolJob
   def design_prompt_v2
     "I am a Year #{@year_level} student and I was given this essay prompt for a #{@essay_type} essay:\n\n" \
     "#{@essay_question}\n\n" \
+    "Can you please provide me three steps of improvement for my writing. Could this be formatted in this way:\n"\
+    "1)\n" \
+    "2)\n" \
+    "3)\n" \
+    "However, none of these steps are to provide an example or what I could write as I don't want to be plagiarised or have the AI write it for me.\n" \
     "Can you give me three numbered steps I could take to improve my #{@type_of_paragraph}. Could you explain each step #{depth_of_suggestions} why I should include them. When referring to my writing, you cannot provide or write an example for me, instead you must provide clear and specific instructions. Please format the response with both the step and reason in the same paragraph.\n\n" \
     "Can you base the three steps on the following conditions. If the writing doesn’t meet one or more of these conditions please suggest a step and reason to meet that condition. If all of the conditions have been met other suggestions on the writing can be made. Only three steps are to be provided though. These are the conditions ranked in order of importance:\n" \
     "#{essay_suggestions}\n" \
